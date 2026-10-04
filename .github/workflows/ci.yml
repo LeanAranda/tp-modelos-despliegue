@@ -95,6 +95,10 @@ jobs:
           exit-code: "0" # cambiar a '1' para que un hallazgo grave frene la entrega
           ignore-unfixed: true
 
+      - name: Normalizar el nombre de la imagen a minúsculas
+        id: img
+        run: echo "nombre=ghcr.io/${GITHUB_REPOSITORY,,}" >> "$GITHUB_OUTPUT"
+
       - name: Publicar en ghcr.io
         if: github.ref == 'refs/heads/main'
         uses: docker/build-push-action@v6
@@ -102,8 +106,8 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}:${{ github.sha }}
-            ghcr.io/${{ github.repository }}:latest
+            ${{ steps.img.outputs.nombre }}:${{ github.sha }}
+            ${{ steps.img.outputs.nombre }}:latest
 
   # ---------------------------------------------------------------------
   # PENDIENTE (entregable 5.3): agregar acá el despliegue automático.

@@ -15,7 +15,7 @@ permissions:
   contents: read
 
 env:
-  NODE_VERSION: '22.14.0'
+  NODE_VERSION: "22.14.0"
 
 jobs:
   calidad:
@@ -87,12 +87,12 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Escanear la imagen en busca de vulnerabilidades
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: turnero:${{ github.sha }}
           format: table
           severity: CRITICAL,HIGH
-          exit-code: '0'   # cambiar a '1' para que un hallazgo grave frene la entrega
+          exit-code: "0" # cambiar a '1' para que un hallazgo grave frene la entrega
           ignore-unfixed: true
 
       - name: Publicar en ghcr.io

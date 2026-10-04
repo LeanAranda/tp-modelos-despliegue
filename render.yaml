@@ -1,0 +1,35 @@
+# Modelo PaaS: infraestructura como código para Render (Blueprint).
+#
+# Render lee este archivo y crea el servicio. NO se declara acá la base de datos:
+# la base PostgreSQL gratuita de Render EXPIRA A LOS 30 DÍAS y el cuatrimestre
+# dura cuatro meses. La base va en Neon, y su cadena de conexión se carga a mano
+# como variable de entorno (sync: false) para que nunca quede escrita en el repositorio.
+
+services:
+  - type: web
+    name: turnero
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: npm ci --omit=dev
+    startCommand: node src/adapters/http/servidor.js
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: DATA_SOURCE
+        value: postgres
+      - key: PGSSL
+        value: "true"
+      - key: SERVICE_MODEL
+        value: paas
+      - key: REGION
+        value: oregon
+      - key: NODE_VERSION
+        value: "22.14.0"
+      - key: LOG_PETICIONES
+        value: "false"
+      # Se carga desde el panel de Render. Nunca en el repositorio.
+      - key: DATABASE_URL
+        sync: false
+      - key: GRUPO
+        sync: false

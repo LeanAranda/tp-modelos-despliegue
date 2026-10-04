@@ -1,0 +1,21 @@
+{
+  "name": "turnero",
+  "version": "1.0.0",
+  "description": "Aplicación de referencia para el TP integrador de Tecnologías Cloud y Seguridad (UNLa)",
+  "type": "module",
+  "engines": { "node": ">=20.11" },
+  "scripts": {
+    "start": "node src/adapters/http/servidor.js",
+    "dev": "DATA_SOURCE=memoria SERVICE_MODEL=local node --watch src/adapters/http/servidor.js",
+    "test": "node --test tests/turnos.test.js && node --experimental-sqlite --test tests/d1-simulado.test.js",
+    "migrar": "node scripts/migrar.mjs",
+    "carga": "node bench/carga.mjs"
+  },
+  "dependencies": {
+    "pg": "^8.13.1"
+  },
+  "devDependencies": {
+    "wrangler": "^3.90.0"
+  },
+  "license": "MIT"
+}

@@ -1,0 +1,31 @@
+# Modelo FaaS: Cloudflare Workers + D1.
+#
+# Antes de desplegar, cada grupo debe:
+#   1. npx wrangler login
+#   2. npx wrangler d1 create turnero-GRUPO_NN
+#   3. pegar acá el database_id que devuelve el comando anterior
+#   4. npx wrangler d1 execute turnero-GRUPO_NN --remote --file=schema/d1.sql
+#   5. node scripts/migrar.mjs --d1 > /tmp/semilla.sql
+#      npx wrangler d1 execute turnero-GRUPO_NN --remote --file=/tmp/semilla.sql
+#   6. npx wrangler deploy
+#
+# El database_id NO es un secreto: identifica la base, no da acceso a ella.
+# El token de despliegue SÍ lo es, y va en los secretos del repositorio.
+
+name = "turnero"
+main = "src/adapters/http/worker.js"
+compatibility_date = "2026-01-15"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = true
+
+[vars]
+APP_VERSION = "1.0.0"
+GRUPO = "sin-configurar"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "turnero-GRUPO_NN"
+database_id = "COMPLETAR-CON-EL-ID-QUE-DEVUELVE-WRANGLER"
+
+[observability]
+enabled = true

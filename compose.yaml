@@ -1,0 +1,54 @@
+# Modelo "contenedores": la aplicación y su base de datos, ambas como contenedores.
+#
+#   docker compose up --build
+#   docker compose exec app node scripts/migrar.mjs
+#   http://localhost:3000
+#
+# Comparar el esfuerzo de esto con instalar PostgreSQL a mano en la VM (modelo IaaS)
+# y con contratar Neon (modelo PaaS) es uno de los ejes del informe.
+
+services:
+  app:
+    build: .
+    image: turnero:local
+    environment:
+      DATA_SOURCE: postgres
+      DATABASE_URL: postgresql://turnero:${POSTGRES_PASSWORD:?definir POSTGRES_PASSWORD en .env}@db:5432/turnero
+      PGSSL: "false"
+      SERVICE_MODEL: contenedores
+      INSTANCE_NAME: contenedor-app
+      GRUPO: ${GRUPO:-sin-configurar}
+      PORT: "3000"
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+    # Endurecimiento básico. Quitar estas líneas y volver a escanear la imagen
+    # es un buen ejercicio para ver qué cambia en el informe de seguridad.
+    read_only: true
+    cap_drop: ["ALL"]
+    security_opt: ["no-new-privileges:true"]
+    tmpfs: ["/tmp"]
+
+  db:
+    image: postgres:16.6-alpine
+    environment:
+      POSTGRES_USER: turnero
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?definir POSTGRES_PASSWORD en .env}
+      POSTGRES_DB: turnero
+    volumes:
+      - datos_pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U turnero -d turnero"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+    # Sin puertos publicados: la base no se expone fuera de la red del compose.
+    # Para inspeccionarla, descomentar y explicar en el informe por qué es un riesgo.
+    # ports: ["5432:5432"]
+
+volumes:
+  datos_pg:

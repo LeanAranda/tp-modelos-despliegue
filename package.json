@@ -6,7 +6,7 @@
   "engines": { "node": ">=20.11" },
   "scripts": {
     "start": "node src/adapters/http/servidor.js",
-    "dev": "DATA_SOURCE=memoria SERVICE_MODEL=local node --watch src/adapters/http/servidor.js",
+    "dev": "node --env-file=.env --watch src/adapters/http/servidor.js",
     "test": "node --test tests/turnos.test.js && node --experimental-sqlite --test tests/d1-simulado.test.js",
     "migrar": "node scripts/migrar.mjs",
     "carga": "node bench/carga.mjs"

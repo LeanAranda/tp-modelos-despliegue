@@ -20,12 +20,12 @@ workers_dev = true
 
 [vars]
 APP_VERSION = "1.0.0"
-GRUPO = "sin-configurar"
+GRUPO = "2"
 
 [[d1_databases]]
 binding = "DB"
-database_name = "turnero-GRUPO_NN"
-database_id = "COMPLETAR-CON-EL-ID-QUE-DEVUELVE-WRANGLER"
+database_name = "turnero-GRUPO_2"
+database_id = "f3c04380-007a-43b4-8e8a-39a907f05c0e"
 
 [observability]
 enabled = true

@@ -1,0 +1,42 @@
+{
+  "medido_en": "2026-10-25T23:37:02.239Z",
+  "modelo": "contenedores",
+  "url": "http://localhost:3000/api/turnos",
+  "configuracion": {
+    "peticiones": 200,
+    "concurrencia": 8
+  },
+  "arranque_en_frio_ms": 664.6,
+  "info_despliegue": {
+    "aplicacion": "turnero",
+    "version": "1.0.0",
+    "modelo_de_servicio": "contenedores",
+    "adaptador_http": "node:http",
+    "adaptador_datos": "postgres",
+    "instancia": "contenedor-app",
+    "region": null,
+    "arrancado_hace_ms": 3026955,
+    "hora_servidor": "2026-10-25T23:37:01.153Z",
+    "grupo": "grupo-2"
+  },
+  "resumen": {
+    "peticiones": 200,
+    "exitosas": 200,
+    "fallidas": 0,
+    "tasa_error_pct": 0,
+    "min_ms": 3.6,
+    "p50_ms": 8.4,
+    "p95_ms": 40.4,
+    "p99_ms": 140.1,
+    "max_ms": 176.2,
+    "promedio_ms": 13.7,
+    "codigos": {
+      "200": 200
+    },
+    "instancias": [
+      "contenedor-app"
+    ],
+    "duracion_s": 0.35,
+    "peticiones_por_segundo": 576.2
+  }
+}

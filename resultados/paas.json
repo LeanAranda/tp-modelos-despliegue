@@ -1,0 +1,42 @@
+{
+  "medido_en": "2026-10-25T22:50:09.135Z",
+  "modelo": "paas",
+  "url": "https://turnero-r1vp.onrender.com/api/turnos",
+  "configuracion": {
+    "peticiones": 200,
+    "concurrencia": 8
+  },
+  "arranque_en_frio_ms": 299,
+  "info_despliegue": {
+    "aplicacion": "turnero",
+    "version": "1.0.0",
+    "modelo_de_servicio": "paas",
+    "adaptador_http": "node:http",
+    "adaptador_datos": "postgres",
+    "instancia": "srv-db5bop8473hc73ajaba0-hibernate-b64b6779d-jjjhp",
+    "region": "oregon",
+    "arrancado_hace_ms": 9929,
+    "hora_servidor": "2026-10-25T22:49:59.731Z",
+    "grupo": "2"
+  },
+  "resumen": {
+    "peticiones": 200,
+    "exitosas": 200,
+    "fallidas": 0,
+    "tasa_error_pct": 0,
+    "min_ms": 228.4,
+    "p50_ms": 241.4,
+    "p95_ms": 432.7,
+    "p99_ms": 686,
+    "max_ms": 701.4,
+    "promedio_ms": 269.1,
+    "codigos": {
+      "200": 200
+    },
+    "instancias": [
+      "srv-db5bop8473hc73ajaba0-hibernate-b64b6779d-jjjhp"
+    ],
+    "duracion_s": 6.8,
+    "peticiones_por_segundo": 29.4
+  }
+}

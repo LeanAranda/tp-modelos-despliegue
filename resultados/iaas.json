@@ -1,0 +1,42 @@
+{
+  "medido_en": "2026-10-24T21:39:56.699Z",
+  "modelo": "iaas",
+  "url": "https://dandelion-gloater-unbridle.ngrok-free.dev/api/turnos",
+  "configuracion": {
+    "peticiones": 200,
+    "concurrencia": 8
+  },
+  "arranque_en_frio_ms": 238,
+  "info_despliegue": {
+    "aplicacion": "turnero",
+    "version": "1.0.0",
+    "modelo_de_servicio": "iaas",
+    "adaptador_http": "node:http",
+    "adaptador_datos": "postgres",
+    "instancia": "Maquina_virtual_g2",
+    "region": "arg",
+    "arrancado_hace_ms": 96555,
+    "hora_servidor": "2026-10-24T21:39:53.411Z",
+    "grupo": "2"
+  },
+  "resumen": {
+    "peticiones": 200,
+    "exitosas": 200,
+    "fallidas": 0,
+    "tasa_error_pct": 0,
+    "min_ms": 70.4,
+    "p50_ms": 75.9,
+    "p95_ms": 124.7,
+    "p99_ms": 232.4,
+    "max_ms": 246.5,
+    "promedio_ms": 85.9,
+    "codigos": {
+      "200": 200
+    },
+    "instancias": [
+      "Maquina_virtual_g2"
+    ],
+    "duracion_s": 2.18,
+    "peticiones_por_segundo": 91.6
+  }
+}

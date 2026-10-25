@@ -1,0 +1,42 @@
+{
+  "medido_en": "2026-10-24T22:25:20.144Z",
+  "modelo": "faas",
+  "url": "https://turnero.le-ar.workers.dev/api/turnos",
+  "configuracion": {
+    "peticiones": 200,
+    "concurrencia": 8
+  },
+  "arranque_en_frio_ms": 190.3,
+  "info_despliegue": {
+    "aplicacion": "turnero",
+    "version": "1.0.0",
+    "modelo_de_servicio": "faas",
+    "adaptador_http": "cloudflare-workers",
+    "adaptador_datos": "d1",
+    "instancia": "worker@GRU",
+    "region": "GRU",
+    "arrancado_hace_ms": 0,
+    "hora_servidor": "2026-10-24T22:25:13.372Z",
+    "grupo": "2"
+  },
+  "resumen": {
+    "peticiones": 200,
+    "exitosas": 200,
+    "fallidas": 0,
+    "tasa_error_pct": 0,
+    "min_ms": 155.1,
+    "p50_ms": 169.9,
+    "p95_ms": 213.3,
+    "p99_ms": 546.6,
+    "max_ms": 687.8,
+    "promedio_ms": 188.5,
+    "codigos": {
+      "200": 200
+    },
+    "instancias": [
+      "worker@GRU"
+    ],
+    "duracion_s": 4.78,
+    "peticiones_por_segundo": 41.9
+  }
+}

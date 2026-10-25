@@ -1,0 +1,164 @@
+# ---------- BASE DE DATOS ----------
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: datos-pg
+spec:
+  accessModes: ["ReadWriteOnce"]
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db
+  labels:
+    app: db
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: db
+  template:
+    metadata:
+      labels:
+        app: db
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:16.6-alpine
+          env:
+            - name: POSTGRES_USER
+              value: turnero
+            - name: POSTGRES_DB
+              value: turnero
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: turnero-secret
+                  key: POSTGRES_PASSWORD
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          ports:
+            - containerPort: 5432
+          readinessProbe:
+            exec:
+              command: ["pg_isready", "-U", "turnero", "-d", "turnero"]
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          volumeMounts:
+            - name: datos
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: datos
+          persistentVolumeClaim:
+            claimName: datos-pg
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db
+spec:
+  type: ClusterIP
+  selector:
+    app: db
+  ports:
+    - port: 5432
+      targetPort: 5432
+
+
+# ---------- APLICACIÓN ----------
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: turnero
+  labels:
+    app: turnero
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: turnero
+  template:
+    metadata:
+      labels:
+        app: turnero
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+      containers:
+        - name: turnero
+          image: turnero:local
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 3000
+          env:
+            - name: DATA_SOURCE
+              value: postgres
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: turnero-secret
+                  key: DATABASE_URL
+            - name: PGSSL
+              value: "false"
+            - name: SERVICE_MODEL
+              value: contenedores
+            - name: GRUPO
+              value: grupo-2
+            - name: INSTANCE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: PORT
+              value: "3000"
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: turnero
+spec:
+  type: NodePort
+  selector:
+    app: turnero
+  ports:
+    - port: 80
+      targetPort: 3000
+      nodePort: 30080 # mapeado a localhost:8080 por kind-config.yaml

@@ -110,14 +110,24 @@ jobs:
             ${{ steps.img.outputs.nombre }}:latest
 
   # ---------------------------------------------------------------------
-  # PENDIENTE (entregable 5.3): agregar acá el despliegue automático.
-  #
-  # Para PaaS (Render): usar el deploy hook del servicio, guardado como
-  #   secreto RENDER_DEPLOY_HOOK, y llamarlo con curl.
-  #
-  # Para FaaS (Cloudflare): usar cloudflare/wrangler-action@v3 con los
-  #   secretos CLOUDFLARE_API_TOKEN y CLOUDFLARE_ACCOUNT_ID.
-  #
-  # En los dos casos: los secretos van en Settings > Secrets and variables,
-  # nunca en este archivo ni en ningún otro del repositorio.
+  # Despliegue automático de FaaS en Cloudflare.
+  # Los secretos van en Settings > Secrets and variables > Actions.
   # ---------------------------------------------------------------------
+  deploy-cloudflare:
+    name: Desplegar Worker en Cloudflare
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs: calidad
+    permissions:
+      contents: read
+    timeout-minutes: 15
+    steps:
+      - name: Descargar el código
+        uses: actions/checkout@v4
+
+      - name: Desplegar Worker
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy
